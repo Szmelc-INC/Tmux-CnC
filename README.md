@@ -1,5 +1,7 @@
 # Tmux-CnC
-Command &amp; Control interface for tmux
+![tmuxcmc-ezgif com-speed](https://github.com/GNU-Szmelc/Tmux-CnC/assets/95081005/574a8ac1-87c6-48e4-811c-6f0f836cf1e0)
+
+Command &amp; Control interface for tmux. \
 Has few handy aliases to make using tmux easier
 
 ### Available aliases

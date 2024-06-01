@@ -1,6 +1,3 @@
-# Tmux-CnC .bashrc file
-# Adding aliases
-
 # Function to get all pane IDs except the currently active one
 get_all_pane_ids_except_current() {
   local current_pane=$(tmux display-message -p "#P")
@@ -69,19 +66,19 @@ focus() {
 
 # Function to split the current pane or all except the current pane
 split() {
-  if [ "$1" == "ALL" ]; then
-    for pane in $(get_all_pane_ids_except_current); do
-      if [ "$2" == "h" ]; then
-        tmux split-window -h -t "$pane"
-      elif [ "$2" == "v" ]; then
-        tmux split-window -v -t "$pane"
+  local pane=$1
+  local direction=$2
+  local percent=$3
+
+  if [ "$pane" == "ALL" ]; then
+    for pane_id in $(get_all_pane_ids_except_current); do
+      if [ "$direction" == "h" ] || [ "$direction" == "v" ]; then
+        tmux split-window -$direction -p $percent -t "$pane_id"
       fi
     done
   else
-    if [ "$2" == "h" ]; then
-      tmux split-window -h -t "$1"
-    elif [ "$2" == "v" ]; then
-      tmux split-window -v -t "$1"
+    if [ "$direction" == "h" ] || [ "$direction" == "v" ]; then
+      tmux split-window -$direction -p $percent -t "$pane"
     fi
   fi
 }
@@ -94,6 +91,55 @@ close() {
     done
   else
     tmux kill-pane -t "$1"
+  fi
+}
+
+# Function to resize a specific pane or all except the current pane
+res() {
+  local direction=$1
+  local size=$2
+  local target=$3
+  local dir_flag
+
+  case $direction in
+    up)
+      dir_flag="-U"
+      ;;
+    down)
+      dir_flag="-D"
+      ;;
+    left)
+      dir_flag="-L"
+      ;;
+    right)
+      dir_flag="-R"
+      ;;
+    *)
+      echo "Invalid direction: $direction"
+      return 1
+      ;;
+  esac
+
+  if [ -z "$size" ]; then
+    if [ -z "$target" ]; then
+      tmux resize-pane $dir_flag
+    elif [ "$target" == "ALL" ]; then
+      for pane in $(get_all_pane_ids_except_current); do
+        tmux resize-pane $dir_flag -t "$pane"
+      done
+    else
+      tmux resize-pane $dir_flag -t "$target"
+    fi
+  else
+    if [ -z "$target" ]; then
+      tmux resize-pane $dir_flag $size
+    elif [ "$target" == "ALL" ]; then
+      for pane in $(get_all_pane_ids_except_current); do
+        tmux resize-pane $dir_flag $size -t "$pane"
+      done
+    else
+      tmux resize-pane $dir_flag $size -t "$target"
+    fi
   fi
 }
 

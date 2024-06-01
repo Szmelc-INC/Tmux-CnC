@@ -1,5 +1,6 @@
 # Tmux-CnC
 Command &amp; Control interface for tmux
+Has few handy aliases to make using tmux easier
 
 ### Available aliases
 - `stop ID` - Stop currently running process [Ctrl + C]
@@ -18,3 +19,6 @@ Command &amp; Control interface for tmux
 > Variable `ID` is pane ID, \
 > `ALL` can also be used to execute on all panes except currently active. \
 > Split pane h = horizontally | v = vertically.
+
+### Extras
+> There is demo script using xdotool available, just start `tmuxcnc.sh` then from there start `demo.sh` and enjoy the show
